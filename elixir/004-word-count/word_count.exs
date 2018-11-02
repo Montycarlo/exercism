@@ -1,4 +1,7 @@
 defmodule Words do
+
+  @re_word_separator ~r/[ _,:!&@#$%^*()]/
+
   @doc """
   Count the number of words in the sentence.
 
@@ -7,8 +10,7 @@ defmodule Words do
   @spec count(String.t()) :: map
   def count(sentence) do
     words_all = String.downcase(sentence)
-      |> (&(String.replace &1, ~r/[,:!&@#$%^*()]/, "")).()
-      |> (&(String.split(&1, ~r/[ _]/, trim: true))).()
+      |> String.split(@re_word_separator, trim: true)
     Enum.reduce(words_all, %{}, fn w, acc -> Map.update(acc, w, 1, &(&1+1)) end)
   end
 
